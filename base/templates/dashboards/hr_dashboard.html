@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Dashboard</title>
+    {% load static %}
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-color: #f5f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .sidebar {
+            background-color: #1e293b;
+            min-height: 100vh;
+            padding: 0;
+        }
+        
+        .sidebar .logo {
+            padding: 20px;
+            border-bottom: 1px solid #334155;
+        }
+        
+        .sidebar .logo h3 {
+            color: white;
+            margin: 0;
+        }
+        
+        .sidebar .logo span {
+            color: #3b82f6;
+        }
+        
+        .sidebar .nav-link {
+            color: #cbd5e1;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar .nav-link:hover,
+        .sidebar .nav-link.active {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: white;
+            border-left-color: #3b82f6;
+        }
+        
+        .sidebar .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+        
+        .main-content {
+            padding: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid;
+        }
+        
+        .stat-card h3 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #64748b;
+            margin: 0;
+        }
+        
+        .card-custom {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .card-header-custom {
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .card-body-custom {
+            padding: 20px;
+        }
+        
+        .job-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .job-card:hover {
+            border-color: #3b82f6;
+            background-color: #f8fafc;
+        }
+        
+        .btn-primary-custom {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+        
+        .btn-primary-custom:hover {
+            background: #2563eb;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar">
+                <div class="logo">
+                    <h3>HR<span>Pro</span></h3>
+                </div>
+                <nav class="nav flex-column mt-3">
+                    <a class="nav-link active" href="#">
+                        <i class="fas fa-home"></i>
+                        Dashboard
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-briefcase"></i>
+                        Jobs
+                    </a>
+                    <a class="nav-link" href="{% url 'employee_management' %}">
+                        <i class="fas fa-users"></i>
+                        Employees management
+                    </a>
+                    <a class="nav-link" href="{% url 'hr_all_applications' %}">
+                        <i class="fas fa-file-alt"></i>
+                        Applicants
+                    </a>
+                    <a class="nav-link" href="{% url 'job_notification' %}">
+                        <i class="fas fa-calendar"></i>
+                        job_notification
+                    </a>
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </nav>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 main-content">
+                <!-- Header -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h2>HR Dashboard</h2>
+                        <p class="text-muted mb-0">Welcome to your HR management system</p>
+                    </div>
+                    <a href="{% url 'create_job' %}" class="btn btn-primary-custom">
+                        <i class="fas fa-plus mr-2"></i>Create Job
+                    </a>
+                </div>
+                
+                <!-- Stats Row -->
+                <div class="row mb-4">
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="border-left-color: #10b981;">
+                            <h3>{{ active_jobs }}</h3>
+                            <p>Active Jobs</p>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="border-left-color: #ef4444;">
+                            <h3>{{ inactive_jobs   }}</h3>
+                            <p>Inactive Jobs</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="stat-card" style="border-left-color: #f59e0b;">
+                            <h3>{{ total_applicants }}</h3>
+                            <p>Total Applicants</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    
+                                    </div>
+                
+                <!-- Active Jobs -->
+                <div class="card-custom">
+                    <div class="card-header-custom d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Active Jobs</h5>
+                        <a href="#" class="text-primary">View All Jobs</a>
+                    </div>
+                    <div class="card-body-custom">
+    {% for job in job_notifications %}
+    <div class="job-card mb-3">
+        <div class="d-flex justify-content-between align-items-start mb-2">
+            <div>
+                <h6 class="mb-1">{{ job.title }}</h6>
+                <small class="text-muted">
+                    {{ job.department }} • {{ job.location }} • {{ job.job_type }}
+                </small>
+            </div>
+
+            {% if job.status == 'open' %}
+                <span class="badge badge-success">OPEN</span>
+            {% else %}
+                <span class="badge badge-secondary">CLOSED</span>
+            {% endif %}
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center">
+            <small>
+                <i class="fas fa-users mr-1"></i>
+                {{ job.applied_jobs }} applicants
+            </small>
+
+            <div>
+                <a href="" class="btn btn-sm btn-outline-primary mr-2">
+                    View
+                </a>
+                <a href="" class="btn btn-sm btn-outline-success">
+                    Edit
+                </a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+        <p class="text-muted text-center">No active job notifications</p>
+    {% endfor %}
+</div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Basic click handlers
+            $('.btn-primary-custom').click(function() {
+                alert('Create Job form would open here');
+            });
+            
+            $('.job-card .btn-outline-primary').click(function() {
+                alert('View job details');
+            });
+            
+            $('.job-card .btn-outline-success').click(function() {
+                alert('Edit job details');
+            });
+        });
+    </script>
+</body>
+</html>
